@@ -1,0 +1,49 @@
+Install Node.js: Make sure you have Node.js installed. You can download it from nodejs.org.
+
+#Create a New Project Directory:
+mkdir cesiumjs-bhel-project
+cd cesiumjs-bhel-project
+
+#Initialize the Project:
+npm init -y
+
+#Install Cesium:
+npm install cesium
+
+#Set Up the Project Structure:
+#Create an index.html file:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CesiumJS BEL Project</title>
+    <style>
+        #cesiumContainer {
+            width: 100%;
+            height: 100vh;
+            display: block;
+        }
+        #layer-toggle-buttons {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+        }
+    </style>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.80/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+</head>
+<body>
+    <div id="cesiumContainer"></div>
+    <div id="layer-toggle-buttons"></div>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.80/Build/Cesium/Cesium.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+#Create an app.js file and paste the provided code into it.
+
+#Run a Local Server: To serve the files locally, you can use a simple server like http-server.
+npx http-server
+
+#Open the Project in Your Browser: Open the URL provided by the local server (e.g., http://localhost:8080) to see your CesiumJS project in action.
