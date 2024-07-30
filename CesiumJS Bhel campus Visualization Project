@@ -1,0 +1,106 @@
+const viewer = new Cesium.Viewer('cesiumContainer');
+
+const bangaloreTileServer = 'https://bhuvan.nrsc.gov.in/tiles/bangalore/{z}/{x}/{y}.png';
+const imageryProvider = new Cesium.TileMapServiceImageryProvider({
+  url: bangaloreTileServer,
+  maximumLevel: 19,
+  credit: 'Bhuvan, NRSC'
+});
+
+viewer.imageryLayers.addImageryProvider(imageryProvider);
+
+const belCampusCoordinates = [
+  Cesium.Cartesian3.fromDegrees(77.56191781078947, 13.045297534088048), // BEL campus location
+];
+
+const belCampusPolygon = viewer.entities.add({
+  name: 'BEL Campus',
+  polygon: {
+    hierarchy: new Cesium.PolygonHierarchy(belCampusCoordinates),
+    material: Cesium.Color.RED.withAlpha(0.5),
+    outline: true,
+    outlineColor: Cesium.Color.BLACK
+  }
+});
+
+// Add toggle buttons for layers
+const layerToggleButtons = document.getElementById('layer-toggle-buttons');
+
+if (layerToggleButtons) {
+  // Add water layer
+  const waterLayer = new Cesium.OpenStreetMapImageryProvider({
+    url: 'https://a.tile.openstreetmap.org/'
+  });
+  viewer.imageryLayers.addImageryProvider(waterLayer);
+
+  const waterLayerButton = document.createElement('button');
+  waterLayerButton.textContent = 'Water Layer';
+  waterLayerButton.onclick = () => {
+    waterLayer.enabled = !waterLayer.enabled;
+  };
+  layerToggleButtons.appendChild(waterLayerButton);
+
+  // Add road layer
+  const roadLayer = new Cesium.OpenStreetMapImageryProvider({
+    url: 'https://b.tile.openstreetmap.org/'
+  });
+  viewer.imageryLayers.addImageryProvider(roadLayer);
+
+  const roadLayerButton = document.createElement('button');
+  roadLayerButton.textContent = 'Road Layer';
+  roadLayerButton.onclick = () => {
+    roadLayer.enabled = !roadLayer.enabled;
+  };
+  layerToggleButtons.appendChild(roadLayerButton);
+} else {
+  console.error("Error: layerToggleButtons element not found");
+}
+
+// Plot irregular boundary with mouse move
+let drawing = false;
+let polygonPoints = [];
+
+viewer.canvas.addEventListener('mousedown', (event) => {
+  drawing = true;
+  const cartesian = viewer.camera.pickEllipsoid(event.position, viewer.scene.globe.ellipsoid);
+  if (cartesian) {
+    polygonPoints.push(cartesian);
+  }
+});
+
+viewer.canvas.addEventListener('mousemove', (event) => {
+  if (drawing) {
+    const cartesian = viewer.camera.pickEllipsoid(event.position, viewer.scene.globe.ellipsoid);
+    if (cartesian) {
+      polygonPoints.push(cartesian);
+    }
+  }
+});
+
+viewer.canvas.addEventListener('mouseup', () => {
+  drawing = false;
+  const polygon = new Cesium.PolygonHierarchy(polygonPoints);
+  const entity = viewer.entities.add({
+    name: 'Irregular Boundary',
+    polygon: {
+      hierarchy: polygon,
+      material: Cesium.Color.BLUE.withAlpha(0.5),
+      outline: true,
+      outlineColor: Cesium.Color.BLACK
+    }
+  });
+  polygonPoints = [];
+});
+
+viewer.camera.setView({
+  destination: Cesium.Cartesian3.fromDegrees(77.5946, 12.9716, 10000), 
+  orientation: {
+    heading: Cesium.Math.toRadians(0),
+    pitch: Cesium.Math.toRadians(-90),
+    roll: 0
+  }
+});
+
+viewer.camera.flyTo({
+  destination: Cesium.Cartesian3.fromDegrees(77.5623, 13.0447, 1000) 
+});
