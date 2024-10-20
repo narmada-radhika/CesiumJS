@@ -1,0 +1,25 @@
+{
+  "name": "cesium-bangalore-map",
+  "version": "1.0.0",
+  "description": "A CesiumJS project to display a map of Bangalore with layers and interactive features.",
+  "main": "main.js",
+  "scripts": {
+    "start": "parcel index.html",  // or use a live server
+    "build": "parcel build index.html"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "cesium": "^1.106.1"  // Example version
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  },
+  "keywords": [
+    "cesium",
+    "maps",
+    "3D",
+    "bhuvan",
+    "openstreetmap"
+  ]
+}
